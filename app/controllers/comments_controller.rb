@@ -26,15 +26,16 @@ class CommentsController < ApplicationController
   def create
     @comment = Comment.new(comment_params)
 
-    respond_to do |format|
       if @comment.save
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @comment }
+        #flash[:test] = comment_params[:idea_id]
+        redirect_to idea_path(Idea.find(comment_params[:idea_id]))
+        #format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
+        #format.json { render action: 'show', status: :created, location: @comment }
       else
-        format.html { render action: 'new' }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        #format.html { render action: 'new' }
+        #format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
-    end
+
   end
 
   # PATCH/PUT /comments/1
@@ -54,9 +55,11 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.json
   def destroy
+    @idea = Idea.find(@comment.idea_id)
     @comment.destroy
+    flash[:delete_comment] = 'Delete comment successfully!'
     respond_to do |format|
-      format.html { redirect_to comments_url }
+      format.html { redirect_to idea_path(@idea) }
       format.json { head :no_content }
     end
   end

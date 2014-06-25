@@ -1,14 +1,22 @@
 <h1>Listing ideas</h1>
 
+<% if flash[:test] %>
+  <%= flash[:test]%>
+<%end%>
+
 <% @ideas.in_groups_of(3) do |group| %>
       <!-- in_groups_of(n) return an n's element array-->
   <div class="row">
-    <% group.compact.each do |idea| %> 
+    <% group.compact.each do |idea| %>
       <!-- compact return an array without nil -->
-      <div class="span4">
-        <%= image_tag idea.picture_url(:thumb) if idea.picture?%>
-        <h4><%= link_to idea.name, idea %></h4>
-        <%= idea.description %>
+      <div class="col-lg-4">
+        <div class="thumbnail">
+          <%= image_tag idea.picture_url(:thumb), width: '200px',class: "img-circle" if idea.picture?%>
+          <div class="caption" style="text-align:center">
+            <h2><%= link_to idea.name, idea, style: "text-align:center" %></h2>
+            <%= idea.description %>
+          </div>
+        </div>
       </div>
     <% end %>
   </div>
